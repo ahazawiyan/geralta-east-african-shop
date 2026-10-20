@@ -1,0 +1,60 @@
+name: Validate and deploy Geralta storefront
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Validate required files
+        run: |
+          test -f index.html
+          test -f styles.css
+          test -f app.js
+          test -f README.md
+      - name: Check JavaScript syntax
+        run: node --check app.js
+      - name: Check HTML title and product categories
+        run: |
+          grep -q "Geralta East African Shop" index.html
+          grep -q 'category:"Drinks"' app.js
+          grep -q 'category:"Spices"' app.js
+          grep -q 'category:"Clothing"' app.js
+          grep -q 'category:"Coffee"' app.js
+          grep -q 'category:"Flour"' app.js
+
+  deploy:
+    if: github.event_name != 'pull_request'
+    needs: validate
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+      - name: Upload website artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
