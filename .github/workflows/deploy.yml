@@ -1,4 +1,4 @@
-name: Validate and deploy Geralta storefront
+name: Validate and deploy Geralta East and African Shop website
 
 on:
   push:
