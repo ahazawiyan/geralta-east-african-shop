@@ -1,4 +1,4 @@
-name: Validate and deploy Geralta East and African Shop website
+name: Validate and deploy Gheralta East and African Shop website
 
 on:
   push:
@@ -30,14 +30,41 @@ jobs:
           test -f README.md
       - name: Check JavaScript syntax
         run: node --check app.js
-      - name: Check HTML title and product categories
+      - name: Validate Gheralta shop catalogue
         run: |
-          grep -q "Geralta East African Shop" index.html
-          grep -Eq 'category:[[:space:]]*"Drinks"' app.js
-          grep -Eq 'category:[[:space:]]*"Spices"' app.js
-          grep -Eq 'category:[[:space:]]*"Clothing"' app.js
-          grep -Eq 'category:[[:space:]]*"Coffee"' app.js
-          grep -Eq 'category:[[:space:]]*"Flour"' app.js
+          set -e
+
+          # Validate the website title and motto
+          grep -q "Gheralta East African Shop" index.html
+          grep -qi "Changing the way" index.html
+
+          # Validate all seven products
+          grep -q 'name: "Ethiopian Coffee"' app.js
+          grep -q 'name: "White Teff Flour"' app.js
+          grep -q 'name: "Brown Teff Flour"' app.js
+          grep -q 'name: "Berbere"' app.js
+          grep -q 'name: "Shiro"' app.js
+          grep -q 'name: "Habesha Beer"' app.js
+          grep -q 'name: "Asmera Beer"' app.js
+
+          # Validate product prices
+          grep -Eq 'price:[[:space:]]*20\.00' app.js
+          grep -Eq 'price:[[:space:]]*22\.00' app.js
+          grep -Eq 'price:[[:space:]]*25\.00' app.js
+          grep -Eq 'price:[[:space:]]*15\.00' app.js
+          grep -Eq 'price:[[:space:]]*3\.00' app.js
+
+          # Validate product quantities
+          grep -q 'note: "1 kg bag"' app.js
+          grep -q 'note: "5 kg bag"' app.js
+          grep -q 'note: "Per bottle"' app.js
+
+          # Validate contact information
+          grep -q 'contact@gheralta-brussels.be' index.html
+          grep -q 'Rue des Tanneurs 94' index.html
+          grep -q '0471 34 83 73' index.html
+
+          echo "Gheralta shop validation passed."
 
   deploy:
     if: github.event_name != 'pull_request'

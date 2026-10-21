@@ -1,26 +1,28 @@
 <!doctype html>
 <html lang="en">
-<!doctype html>
-<html lang="en">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description"
-    content="Discover East African drinks, spices, coffee, flour and clothing at Geralta East African Shop.">
-  <title>Geralta East African Shop</title>
+    content="Gheralta East African Shop in Brussels. Discover Ethiopian coffee, teff flour, berbere, shiro and more. Changing the way you eat.">
+  <title>Gheralta East African Shop | Brussels</title>
   <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
   <header class="site-header">
-    <a class="brand" href="#" aria-label="Geralta home">
+    <a class="brand" href="#" aria-label="Gheralta home">
       <span class="brand-mark">G</span>
-      <span><strong>GERALTA</strong><small>East African Shop</small></span>
+      <span><strong>Gheralta</strong><small>East African Shop</small></span>
     </a>
+
     <nav aria-label="Main navigation">
       <a href="#shop">Shop</a>
       <a href="#about">About</a>
       <a href="#contact">Contact</a>
     </nav>
+
     <button class="cart-button" id="cart-toggle" aria-label="Open shopping cart">
       Cart <span id="cart-count">0</span>
     </button>
@@ -29,65 +31,119 @@
   <main>
     <section class="hero">
       <div class="hero-copy">
-        <p class="eyebrow">A taste of home</p>
-        <h1>East African favourites,<br><em>all in one place.</em></h1>
-        <p>Shop everyday essentials, rich coffee, fragrant spices, traditional flour and clothing.</p>
+        <p class="eyebrow">A taste of East Africa</p>
+        <h1>Changing the way<br><em>you eat.</em></h1>
+        <p>Discover Ethiopian coffee, traditional teff flour, berbere and shiro at Gheralta East African Shop in
+          Brussels.</p>
         <a class="primary-button" href="#shop">Explore the shop <span aria-hidden="true">→</span></a>
       </div>
+
       <div class="hero-art" aria-label="Illustration of coffee, spices and grains">
         <div class="sun"></div>
-        <div class="coffee-bag"><span>GERALTA</span><small>ETHIOPIAN COFFEE</small></div>
-        <div class="bowl bowl-one"></div><div class="bowl bowl-two"></div>
-        <div class="grain grain-one"></div><div class="grain grain-two"></div>
+        <div class="coffee-bag"><span>Gheralta</span><small>ETHIOPIAN COFFEE</small></div>
+        <div class="bowl bowl-one"></div>
+        <div class="bowl bowl-two"></div>
+        <div class="grain grain-one"></div>
+        <div class="grain grain-two"></div>
         <span class="art-caption">Good food. Deep roots.</span>
       </div>
     </section>
 
     <section class="shop-section" id="shop">
       <div class="section-heading">
-        <div><p class="eyebrow">Browse the collection</p><h2>Shop by category</h2></div>
-        <p>Small selection to start — we can add your real products and prices later.</p>
+        <div>
+          <p class="eyebrow">Our selection</p>
+          <h2>Shop our products</h2>
+        </div>
+        <p>East African essentials for your home and kitchen.</p>
       </div>
-      
+
       <div class="product-search">
         <label for="product-search">Search products</label>
-        <input type="search" id="product-search" placeholder="Search coffee, spices, flour..." autocomplete="off">
+        <input type="search" id="product-search" placeholder="Search coffee, flour, berbere..." autocomplete="off">
         <p id="search-results" aria-live="polite"></p>
       </div>
 
       <div class="category-filters" id="category-filters" aria-label="Filter products">
         <button class="filter active" data-category="All">All products</button>
-        <button class="filter" data-category="Drinks">Drinks</button>
-        <button class="filter" data-category="Spices">Spices</button>
-        <button class="filter" data-category="Clothing">Clothing</button>
         <button class="filter" data-category="Coffee">Coffee</button>
-        <button class="filter" data-category="Flour">Flour</button>
+        <button class="filter" data-category="Flour">Teff flour</button>
+        <button class="filter" data-category="Spices">Spices</button>
+        <button class="filter" data-category="Drinks">Drinks</button>
       </div>
+
       <div class="product-grid" id="product-grid"></div>
     </section>
 
     <section class="about-strip" id="about">
       <div class="about-symbol">✳</div>
-      <div><p class="eyebrow">From our roots to your home</p><h2>Tradition in every choice.</h2></div>
-      <p>Geralta brings together familiar East African staples and everyday favourites. This starter shop is a demo storefront; product details can be updated for your business.</p>
+      <div>
+        <p class="eyebrow">From our roots to your home</p>
+        <h2>Tradition in every choice.</h2>
+      </div>
+      <p>Gheralta brings East African flavours and everyday essentials to Brussels. Changing the way you eat.</p>
     </section>
+
     <section class="contact-strip" id="contact">
-      <div><p class="eyebrow">Questions or orders?</p><h2>Let’s keep in touch.</h2></div>
-      <p>Add your shop email, phone number and delivery information here before launch.</p>
-      <a class="secondary-button" href="mailto:hello@example.com">Contact the shop</a>
+      <div>
+        <p class="eyebrow">Visit or contact us</p>
+        <h2>We'd love to hear from you.</h2>
+      </div>
+
+      <div class="contact-details">
+        <p>
+          <strong>Email:</strong>
+          <a href="mailto:contact@gheralta-brussels.be">contact@gheralta-brussels.be</a>
+        </p>
+        <p>
+          <strong>Phone:</strong>
+          <a href="tel:+32471348373">0471 34 83 73</a>
+        </p>
+        <p>
+          <strong>Address:</strong>
+          <a href="https://www.google.com/maps/search/?api=1&query=Rue+des+Tanneurs+94%2C+1000+Bruxelles"
+            target="_blank" rel="noopener noreferrer">
+            Rue des Tanneurs 94, 1000 Bruxelles, Belgium
+          </a>
+        </p>
+
+        <p><strong>Opening hours</strong></p>
+        <ul>
+          <li>Monday: Closed</li>
+          <li>Tuesday–Sunday: 11:30–18:00</li>
+        </ul>
+      </div>
     </section>
   </main>
 
-  <footer><a class="footer-brand" href="#">GERALTA</a><span>East African Shop</span><span>© <span id="year"></span> Geralta</span></footer>
+  <footer>
+    <a class="footer-brand" href="#">Gheralta</a>
+    <span>Changing the way you eat.</span>
+    <span>© <span id="year"></span> Gheralta</span>
+  </footer>
 
   <aside class="cart-panel" id="cart-panel" aria-label="Shopping cart" hidden>
-    <div class="cart-heading"><h2>Your cart</h2><button id="cart-close" aria-label="Close cart">×</button></div>
-    <div id="cart-items" class="cart-items"><p class="empty-cart">Your cart is empty.</p></div>
-    <div class="cart-total"><span>Total</span><strong id="cart-total">€0.00</strong></div>
-    <p class="cart-note">Demo checkout only — payments and delivery are not connected yet.</p>
-    <button class="primary-button checkout-button" id="checkout-button">Continue (demo)</button>
+    <div class="cart-heading">
+      <h2>Your cart</h2>
+      <button id="cart-close" aria-label="Close cart">×</button>
+    </div>
+    <div id="cart-items" class="cart-items">
+      <p class="empty-cart">Your cart is empty.</p>
+    </div>
+    <div class="cart-total">
+      <span>Total</span>
+      <strong id="cart-total">€0.00</strong>
+    </div>
+    <p class="cart-note">
+      Demo checkout only — online payments and delivery are not connected yet.
+    </p>
+    <button class="primary-button checkout-button" id="checkout-button">
+      Continue (demo)
+    </button>
   </aside>
+
   <div class="cart-backdrop" id="cart-backdrop" hidden></div>
   <script src="app.js"></script>
 </body>
+
 </html>
