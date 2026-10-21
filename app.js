@@ -1,15 +1,61 @@
 
 const products = [
-  { id: 1, name: "Hibiscus Herbal Tea", category: "Drinks", price: 4.50, emoji: "🫖", note: "Tea & drinks" },
-  { id: 2, name: "Spiced Ginger Drink", category: "Drinks", price: 3.50, emoji: "🥤", note: "Tea & drinks" },
-  { id: 3, name: "Berbere Spice Blend", category: "Spices", price: 5.00, emoji: "🌶️", note: "Aromatic spices" },
-  { id: 4, name: "Mitmita Spice", category: "Spices", price: 4.75, emoji: "🫙", note: "Aromatic spices" },
-  { id: 5, name: "Traditional Cotton Scarf", category: "Clothing", price: 18.00, emoji: "🧣", note: "Clothing & textiles" },
-  { id: 6, name: "Woven Pattern Shirt", category: "Clothing", price: 28.00, emoji: "👕", note: "Clothing & textiles" },
-  { id: 7, name: "Ethiopian Arabica Coffee", category: "Coffee", price: 9.50, emoji: "☕", note: "Whole bean or ground" },
-  { id: 8, name: "Roasted Coffee Beans", category: "Coffee", price: 11.00, emoji: "🫘", note: "Rich & aromatic" },
-  { id: 9, name: "Teff Flour", category: "Flour", price: 7.00, emoji: "🌾", note: "Traditional grains" },
-  { id: 10, name: "Barley Flour", category: "Flour", price: 4.50, emoji: "🥣", note: "Traditional grains" }
+  {
+    id: 1,
+    name: "Ethiopian Coffee",
+    category: "Coffee",
+    price: 20.00,
+    emoji: "☕",
+    note: "1 kg bag"
+  },
+  {
+    id: 2,
+    name: "White Teff Flour",
+    category: "Flour",
+    price: 22.00,
+    emoji: "🌾",
+    note: "5 kg bag"
+  },
+  {
+    id: 3,
+    name: "Brown Teff Flour",
+    category: "Flour",
+    price: 20.00,
+    emoji: "🌾",
+    note: "5 kg bag"
+  },
+  {
+    id: 4,
+    name: "Berbere",
+    category: "Spices",
+    price: 25.00,
+    emoji: "🌶️",
+    note: "1 kg"
+  },
+  {
+    id: 5,
+    name: "Shiro",
+    category: "Spices",
+    price: 15.00,
+    emoji: "🫘",
+    note: "1 kg"
+  },
+  {
+    id: 6,
+    name: "Habesha Beer",
+    category: "Drinks",
+    price: 3.00,
+    emoji: "🍺",
+    note: "Per bottle"
+  },
+  {
+    id: 7,
+    name: "Asmera Beer",
+    category: "Drinks",
+    price: 3.00,
+    emoji: "🍺",
+    note: "Per bottle"
+  }
 ];
 
 const grid = document.querySelector("#product-grid");
