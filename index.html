@@ -1,9 +1,12 @@
 <!doctype html>
 <html lang="en">
+<!doctype html>
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Discover East African drinks, spices, coffee, flour and clothing at Geralta East African Shop.">
+  <meta name="description"
+    content="Discover East African drinks, spices, coffee, flour and clothing at Geralta East African Shop.">
   <title>Geralta East African Shop</title>
   <link rel="stylesheet" href="styles.css">
 </head>
@@ -45,6 +48,13 @@
         <div><p class="eyebrow">Browse the collection</p><h2>Shop by category</h2></div>
         <p>Small selection to start — we can add your real products and prices later.</p>
       </div>
+      
+      <div class="product-search">
+        <label for="product-search">Search products</label>
+        <input type="search" id="product-search" placeholder="Search coffee, spices, flour..." autocomplete="off">
+        <p id="search-results" aria-live="polite"></p>
+      </div>
+
       <div class="category-filters" id="category-filters" aria-label="Filter products">
         <button class="filter active" data-category="All">All products</button>
         <button class="filter" data-category="Drinks">Drinks</button>

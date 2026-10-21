@@ -1,4 +1,4 @@
-name: Validate and deploy Geralta storefront
+name: Validate and deploy Geralta East and African Shop website
 
 on:
   push:
@@ -33,11 +33,11 @@ jobs:
       - name: Check HTML title and product categories
         run: |
           grep -q "Geralta East African Shop" index.html
-          grep -q 'category:"Drinks"' app.js
-          grep -q 'category:"Spices"' app.js
-          grep -q 'category:"Clothing"' app.js
-          grep -q 'category:"Coffee"' app.js
-          grep -q 'category:"Flour"' app.js
+          grep -Eq 'category:[[:space:]]*"Drinks"' app.js
+          grep -Eq 'category:[[:space:]]*"Spices"' app.js
+          grep -Eq 'category:[[:space:]]*"Clothing"' app.js
+          grep -Eq 'category:[[:space:]]*"Coffee"' app.js
+          grep -Eq 'category:[[:space:]]*"Flour"' app.js
 
   deploy:
     if: github.event_name != 'pull_request'
