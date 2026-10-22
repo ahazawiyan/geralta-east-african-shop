@@ -179,8 +179,8 @@ function renderCart() {
     }
   }
 
-  document.querySelector("#cart-total").textContent =
-    money(subtotal + (shipping ?? 0));
+ document.querySelector("#cart-total").textContent =
+  `Product subtotal: ${money(subtotal)}`;
 
   // Show shipping details below the existing cart total.
   let shippingDetails = document.querySelector("#shipping-details");
@@ -199,17 +199,16 @@ function renderCart() {
     shippingDetails.innerHTML = "";
   } else if (shipping === null) {
     shippingDetails.innerHTML = `
-      <p>Estimated parcel weight: ${parcelWeight.toFixed(2)} kg</p>
-      <p>Shipping: Manual quote required for parcels over 20 kg.</p>
-      <p><strong>Final total: Please contact us for a delivery quote.</strong></p>
-    `;
+    <p>Estimated parcel weight: ${parcelWeight.toFixed(2)} kg</p>
+    <p>Shipping: Manual quote required for parcels over 20 kg.</p>
+    <p><strong>Final total: To be confirmed after delivery quote.</strong></p>
+  `;
   } else {
     shippingDetails.innerHTML = `
-      <p>Product subtotal: ${money(subtotal)}</p>
       <p>Estimated parcel weight: ${parcelWeight.toFixed(2)} kg</p>
-      <p>Shipping: ${money(shipping)}</p>
-      <p><strong>Total including shipping: ${money(subtotal + shipping)}</strong></p>
-    `;
+    <p>Shipping: ${money(shipping)}</p>
+    <p><strong>Total including shipping: ${money(subtotal + shipping)}</strong></p>
+`;
   }
 }
 
@@ -294,11 +293,69 @@ document.querySelector("#cart-backdrop").addEventListener("click", () => {
   setCartOpen(false);
 });
 
-document.querySelector("#checkout-button").addEventListener("click", () => {
+
+const checkoutButton = document.querySelector("#checkout-button");
+const checkoutForm = document.querySelector("#checkout-form");
+const backToCartButton = document.querySelector("#back-to-cart");
+const cartItemsContainer = document.querySelector("#cart-items");
+
+checkoutButton.addEventListener("click", () => {
+  if (cart.length === 0) {
+    alert("Your cart is empty. Please add a product first.");
+    return;
+  }
+
+  const shippingDetails = document.querySelector("#shipping-details");
+  const shippingText = shippingDetails?.textContent || "";
+
+  // Do not proceed when the parcel requires a manual delivery quote.
+  if (shippingText.includes("Manual quote required")) {
+    alert(
+      "Your parcel exceeds 20 kg. Please contact us for a delivery quote before proceeding."
+    );
+    return;
+  }
+
+  checkoutButton.hidden = true;
+  checkoutForm.hidden = false;
+  cartItemsContainer.hidden = true;
+
+  checkoutForm.scrollIntoView({ behavior: "smooth", block: "start" });
+});
+
+backToCartButton.addEventListener("click", () => {
+  checkoutForm.hidden = true;
+  checkoutButton.hidden = false;
+  cartItemsContainer.hidden = false;
+});
+
+
+const phoneInput = document.querySelector("#customer-phone");
+
+function validatePhoneNumber() {
+  const digits = phoneInput.value.replace(/\D/g, "");
+
+  phoneInput.setCustomValidity(
+    digits.length >= 10
+      ? ""
+      : "Please enter a phone number containing at least 10 digits."
+  );
+}
+
+phoneInput.addEventListener("input", validatePhoneNumber);
+
+checkoutForm.addEventListener("submit", event => {
+  event.preventDefault();
+
+  if (!checkoutForm.reportValidity()) {
+    return;
+  }
+
   alert(
-    "Demo checkout only. Real payments and delivery will be added later."
+    "Your delivery details are valid. Order submission and online payment are not enabled yet."
   );
 });
+
 
 document.querySelector("#year").textContent = new Date().getFullYear();
 

@@ -131,20 +131,64 @@
       <p class="empty-cart">Your cart is empty.</p>
     </div>
     <div class="cart-total">
-      <span>Total</span>
       <strong id="cart-total">€0.00</strong>
     </div>
-    <p class="cart-note">
-      Ready to order? Contact us by phone or email to place your order.
-      Online payment is coming soon.
-      <br><br>
-      Phone: <a href="tel:+32471348373">0471 34 83 73</a>
-      <br>
-      Email: <a href="mailto:contact@gheralta-brussels.be">contact@gheralta-brussels.be</a>
-    </p>
+    
     <button class="primary-button checkout-button" id="checkout-button">
-      Continue (demo)
+      Continue to checkout
     </button>
+    
+    <form id="checkout-form" hidden>
+      <h3>Delivery details</h3>
+    <p class="required-note">
+      Fields marked <span class="required-star">*</span> are mandatory.
+    </p>
+      <label for="customer-name">
+        Full name <span class="required-star" aria-hidden="true">*</span>
+      </label>
+      <input type="text" id="customer-name" name="customerName" autocomplete="name" required>
+    
+      <label for="customer-email">Email address</label>
+      <label for="customer-name">
+        Full name <span class="required-star" aria-hidden="true">*</span>
+      </label>
+      <input type="email" id="customer-email" name="customerEmail" autocomplete="email" required>
+    
+      <label for="customer-phone">
+        Phone number <span class="required-star">*</span>
+      </label>
+      <input type="tel" id="customer-phone" name="customerPhone" autocomplete="tel" placeholder="e.g. 0410067253" required>
+    
+      <label for="customer-name">
+        Street and house number <span class="required-star" aria-hidden="true">*</span>
+      </label>
+      <input type="text" id="delivery-street" name="deliveryStreet" autocomplete="street-address" required>
+    <label for="delivery-box">Bus / Box number (optional)</label>
+    <input type="text" id="delivery-box" name="deliveryBox" autocomplete="address-line2" placeholder="e.g. Bus 3">
+
+      <label for="customer-name">
+        Belgian postcode <span class="required-star" aria-hidden="true">*</span>
+      </label>
+      <input type="text" id="delivery-postcode" name="deliveryPostcode" autocomplete="postal-code" inputmode="numeric"
+        pattern="[0-9]{4}" maxlength="4" required>
+    
+      <label for="customer-name">
+        City or municipality <span class="required-star" aria-hidden="true">*</span>
+      </label>
+      <input type="text" id="delivery-city" name="deliveryCity" autocomplete="address-level2" required>
+    
+      <label for="delivery-instructions">Delivery instructions (optional)</label>
+      <textarea id="delivery-instructions" name="deliveryInstructions" rows="3"></textarea>
+    
+      <button type="submit" class="primary-button checkout-button">
+        Review order
+      </button>
+    
+      <button type="button" id="back-to-cart" class="secondary-button">
+        Back to cart
+      </button>
+    </form>
+
   </aside>
 
   <div class="cart-backdrop" id="cart-backdrop" hidden></div>
