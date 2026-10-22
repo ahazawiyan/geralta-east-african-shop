@@ -39,3 +39,35 @@
     grid-column: 1 / -1;
     padding: 24px 0;
 }
+
+/* Cart total and shipping breakdown */
+#cart-total {
+    display: block;
+    margin-bottom: 12px;
+}
+
+#shipping-details {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid #e5ded2;
+}
+
+#shipping-details p {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 16px;
+    margin: 0;
+    line-height: 1.5;
+}
+
+#shipping-details p strong {
+    font-weight: 700;
+}
+
+#shipping-details p:last-child {
+    padding-top: 6px;
+}

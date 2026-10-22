@@ -5,6 +5,7 @@ const products = [
     name: "Ethiopian Coffee",
     category: "Coffee",
     price: 20.00,
+    weightKg: 1,
     emoji: "☕",
     note: "1 kg bag"
   },
@@ -13,6 +14,7 @@ const products = [
     name: "White Teff Flour",
     category: "Flour",
     price: 22.00,
+    weightKg: 5,
     emoji: "🌾",
     note: "5 kg bag"
   },
@@ -21,6 +23,7 @@ const products = [
     name: "Brown Teff Flour",
     category: "Flour",
     price: 20.00,
+    weightKg: 5,
     emoji: "🌾",
     note: "5 kg bag"
   },
@@ -29,6 +32,7 @@ const products = [
     name: "Berbere",
     category: "Spices",
     price: 25.00,
+    weightKg: 1,
     emoji: "🌶️",
     note: "1 kg"
   },
@@ -37,6 +41,7 @@ const products = [
     name: "Shiro",
     category: "Spices",
     price: 15.00,
+    weightKg: 1,
     emoji: "🫘",
     note: "1 kg"
   },
@@ -45,6 +50,7 @@ const products = [
     name: "Habesha Beer",
     category: "Drinks",
     price: 3.00,
+    weightKg: 1,
     emoji: "🍺",
     note: "Per bottle"
   },
@@ -53,6 +59,7 @@ const products = [
     name: "Asmera Beer",
     category: "Drinks",
     price: 3.00,
+    weightKg: 1,
     emoji: "🍺",
     note: "Per bottle"
   }
@@ -116,6 +123,7 @@ function renderProducts() {
     `${visible.length} product${visible.length === 1 ? "" : "s"} found`;
 }
 
+
 function renderCart() {
   document.querySelector("#cart-count").textContent =
     cart.reduce((sum, item) => sum + item.qty, 0);
@@ -141,12 +149,70 @@ function renderCart() {
     `).join("");
   }
 
-  const total = cart.reduce(
+  // Calculate product subtotal and total product weight.
+  const subtotal = cart.reduce(
     (sum, item) => sum + item.price * item.qty, 0
   );
 
-  document.querySelector("#cart-total").textContent = money(total);
+  const productWeight = cart.reduce(
+    (sum, item) => sum + item.weightKg * item.qty, 0
+  );
+
+  // Temporary allowance for packaging.
+  const packagingWeight = cart.length > 0 ? 0.5 : 0;
+  const parcelWeight = productWeight + packagingWeight;
+
+  // Provisional shipping rates.
+  let shipping = 0;
+
+  if (cart.length > 0) {
+    if (parcelWeight <= 2) {
+      shipping = 8.50;
+    } else if (parcelWeight <= 5) {
+      shipping = 9.00;
+    } else if (parcelWeight <= 10) {
+      shipping = 10.00;
+    } else if (parcelWeight <= 20) {
+      shipping = 12.50;
+    } else {
+      shipping = null;
+    }
+  }
+
+  document.querySelector("#cart-total").textContent =
+    money(subtotal + (shipping ?? 0));
+
+  // Show shipping details below the existing cart total.
+  let shippingDetails = document.querySelector("#shipping-details");
+
+  if (!shippingDetails) {
+    shippingDetails = document.createElement("div");
+    shippingDetails.id = "shipping-details";
+
+    document.querySelector("#cart-total").insertAdjacentElement(
+      "afterend",
+      shippingDetails
+    );
+  }
+
+  if (cart.length === 0) {
+    shippingDetails.innerHTML = "";
+  } else if (shipping === null) {
+    shippingDetails.innerHTML = `
+      <p>Estimated parcel weight: ${parcelWeight.toFixed(2)} kg</p>
+      <p>Shipping: Manual quote required for parcels over 20 kg.</p>
+      <p><strong>Final total: Please contact us for a delivery quote.</strong></p>
+    `;
+  } else {
+    shippingDetails.innerHTML = `
+      <p>Product subtotal: ${money(subtotal)}</p>
+      <p>Estimated parcel weight: ${parcelWeight.toFixed(2)} kg</p>
+      <p>Shipping: ${money(shipping)}</p>
+      <p><strong>Total including shipping: ${money(subtotal + shipping)}</strong></p>
+    `;
+  }
 }
+
 
 filters.addEventListener("click", event => {
   const button = event.target.closest("[data-category]");
