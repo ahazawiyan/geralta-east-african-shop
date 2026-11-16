@@ -5,6 +5,7 @@ const products = [
     name: "Ethiopian Coffee",
     category: "Coffee",
     price: 20.00,
+    weightKg: 1,
     emoji: "☕",
     note: "1 kg bag"
   },
@@ -13,6 +14,7 @@ const products = [
     name: "White Teff Flour",
     category: "Flour",
     price: 22.00,
+    weightKg: 5,
     emoji: "🌾",
     note: "5 kg bag"
   },
@@ -21,6 +23,7 @@ const products = [
     name: "Brown Teff Flour",
     category: "Flour",
     price: 20.00,
+    weightKg: 5,
     emoji: "🌾",
     note: "5 kg bag"
   },
@@ -29,6 +32,7 @@ const products = [
     name: "Berbere",
     category: "Spices",
     price: 25.00,
+    weightKg: 1,
     emoji: "🌶️",
     note: "1 kg"
   },
@@ -37,6 +41,7 @@ const products = [
     name: "Shiro",
     category: "Spices",
     price: 15.00,
+    weightKg: 1,
     emoji: "🫘",
     note: "1 kg"
   },
@@ -45,6 +50,7 @@ const products = [
     name: "Habesha Beer",
     category: "Drinks",
     price: 3.00,
+    weightKg: 1,
     emoji: "🍺",
     note: "Per bottle"
   },
@@ -53,6 +59,7 @@ const products = [
     name: "Asmera Beer",
     category: "Drinks",
     price: 3.00,
+    weightKg: 1,
     emoji: "🍺",
     note: "Per bottle"
   }
@@ -116,6 +123,7 @@ function renderProducts() {
     `${visible.length} product${visible.length === 1 ? "" : "s"} found`;
 }
 
+
 function renderCart() {
   document.querySelector("#cart-count").textContent =
     cart.reduce((sum, item) => sum + item.qty, 0);
@@ -141,12 +149,69 @@ function renderCart() {
     `).join("");
   }
 
-  const total = cart.reduce(
+  // Calculate product subtotal and total product weight.
+  const subtotal = cart.reduce(
     (sum, item) => sum + item.price * item.qty, 0
   );
 
-  document.querySelector("#cart-total").textContent = money(total);
+  const productWeight = cart.reduce(
+    (sum, item) => sum + item.weightKg * item.qty, 0
+  );
+
+  // Temporary allowance for packaging.
+  const packagingWeight = cart.length > 0 ? 0.5 : 0;
+  const parcelWeight = productWeight + packagingWeight;
+
+  // Provisional shipping rates.
+  let shipping = 0;
+
+  if (cart.length > 0) {
+    if (parcelWeight <= 2) {
+      shipping = 8.50;
+    } else if (parcelWeight <= 5) {
+      shipping = 9.00;
+    } else if (parcelWeight <= 10) {
+      shipping = 10.00;
+    } else if (parcelWeight <= 20) {
+      shipping = 12.50;
+    } else {
+      shipping = null;
+    }
+  }
+
+ document.querySelector("#cart-total").textContent =
+  `Product subtotal: ${money(subtotal)}`;
+
+  // Show shipping details below the existing cart total.
+  let shippingDetails = document.querySelector("#shipping-details");
+
+  if (!shippingDetails) {
+    shippingDetails = document.createElement("div");
+    shippingDetails.id = "shipping-details";
+
+    document.querySelector("#cart-total").insertAdjacentElement(
+      "afterend",
+      shippingDetails
+    );
+  }
+
+  if (cart.length === 0) {
+    shippingDetails.innerHTML = "";
+  } else if (shipping === null) {
+    shippingDetails.innerHTML = `
+    <p>Estimated parcel weight: ${parcelWeight.toFixed(2)} kg</p>
+    <p>Shipping: Manual quote required for parcels over 20 kg.</p>
+    <p><strong>Final total: To be confirmed after delivery quote.</strong></p>
+  `;
+  } else {
+    shippingDetails.innerHTML = `
+      <p>Estimated parcel weight: ${parcelWeight.toFixed(2)} kg</p>
+    <p>Shipping: ${money(shipping)}</p>
+    <p><strong>Total including shipping: ${money(subtotal + shipping)}</strong></p>
+`;
+  }
 }
+
 
 filters.addEventListener("click", event => {
   const button = event.target.closest("[data-category]");
@@ -228,11 +293,69 @@ document.querySelector("#cart-backdrop").addEventListener("click", () => {
   setCartOpen(false);
 });
 
-document.querySelector("#checkout-button").addEventListener("click", () => {
+
+const checkoutButton = document.querySelector("#checkout-button");
+const checkoutForm = document.querySelector("#checkout-form");
+const backToCartButton = document.querySelector("#back-to-cart");
+const cartItemsContainer = document.querySelector("#cart-items");
+
+checkoutButton.addEventListener("click", () => {
+  if (cart.length === 0) {
+    alert("Your cart is empty. Please add a product first.");
+    return;
+  }
+
+  const shippingDetails = document.querySelector("#shipping-details");
+  const shippingText = shippingDetails?.textContent || "";
+
+  // Do not proceed when the parcel requires a manual delivery quote.
+  if (shippingText.includes("Manual quote required")) {
+    alert(
+      "Your parcel exceeds 20 kg. Please contact us for a delivery quote before proceeding."
+    );
+    return;
+  }
+
+  checkoutButton.hidden = true;
+  checkoutForm.hidden = false;
+  cartItemsContainer.hidden = true;
+
+  checkoutForm.scrollIntoView({ behavior: "smooth", block: "start" });
+});
+
+backToCartButton.addEventListener("click", () => {
+  checkoutForm.hidden = true;
+  checkoutButton.hidden = false;
+  cartItemsContainer.hidden = false;
+});
+
+
+const phoneInput = document.querySelector("#customer-phone");
+
+function validatePhoneNumber() {
+  const digits = phoneInput.value.replace(/\D/g, "");
+
+  phoneInput.setCustomValidity(
+    digits.length >= 10
+      ? ""
+      : "Please enter a phone number containing at least 10 digits."
+  );
+}
+
+phoneInput.addEventListener("input", validatePhoneNumber);
+
+checkoutForm.addEventListener("submit", event => {
+  event.preventDefault();
+
+  if (!checkoutForm.reportValidity()) {
+    return;
+  }
+
   alert(
-    "Demo checkout only. Real payments and delivery will be added later."
+    "Your delivery details are valid. Order submission and online payment are not enabled yet."
   );
 });
+
 
 document.querySelector("#year").textContent = new Date().getFullYear();
 
