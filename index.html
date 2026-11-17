@@ -143,15 +143,27 @@
     <p class="required-note">
       Fields marked <span class="required-star">*</span> are mandatory.
     </p>
-      <label for="customer-name">
-        Full name <span class="required-star" aria-hidden="true">*</span>
+      <label for="customer-first-name">
+        First name <span class="required-star" aria-hidden="true">*</span>
       </label>
-      <input type="text" id="customer-name" name="customerName" autocomplete="name" required>
+      <input type="text" id="customer-first-name" name="customerFirstName" autocomplete="given-name" maxlength="50" required>
+
+      <label for="customer-last-name">
+        Last name <span class="required-star" aria-hidden="true">*</span>
+      </label>
+      <input type="text" id="customer-last-name" name="customerLastName" autocomplete="family-name" maxlength="50" required>
     
-      <label for="customer-email">Email address</label>
+      <label for="customer-email">
+        Email address <span class="required-star" aria-hidden="true">*</span>
+      </label>
       <input type="email" id="customer-email" name="customerEmail" autocomplete="email" required>
-    
-      <label for="phone-country">Country</label>
+
+      <label for="customer-phone">
+        Phone number <span class="required-star" aria-hidden="true">*</span>
+      </label>
+      <input type="tel" id="customer-phone" name="customerPhone" autocomplete="tel-national" placeholder="e.g. 0471 34 83 73" required>
+
+      <label for="phone-country">Country / calling code</label>
       <select id="phone-country" name="phoneCountry" autocomplete="country" required>
         <option value="AT" data-dial="43">Austria (+43)</option>
         <option value="BE" data-dial="32" selected>Belgium (+32)</option>
@@ -181,17 +193,6 @@
         <option value="ES" data-dial="34">Spain (+34)</option>
         <option value="SE" data-dial="46">Sweden (+46)</option>
       </select>
-      <label for="customer-phone">
-        Phone number <span class="required-star">*</span>
-      </label>
-      <input type="tel" id="customer-phone" name="customerPhone" autocomplete="tel-national" placeholder="e.g. 0471 34 83 73" required>
-    
-      <label for="delivery-street">
-        Street and house number <span class="required-star" aria-hidden="true">*</span>
-      </label>
-      <input type="text" id="delivery-street" name="deliveryStreet" autocomplete="street-address" required>
-    <label for="delivery-box">Bus / Box number (optional)</label>
-    <input type="text" id="delivery-box" name="deliveryBox" autocomplete="address-line2" placeholder="e.g. Bus 3">
 
       <label for="delivery-postcode">
         Belgian postcode <span class="required-star" aria-hidden="true">*</span>
@@ -207,6 +208,14 @@
       <select id="delivery-city" name="deliveryCity" autocomplete="address-level2" required disabled>
         <option value="">Choose a postcode first</option>
       </select>
+
+      <label for="delivery-street">
+        Street and house number <span class="required-star" aria-hidden="true">*</span>
+      </label>
+      <input type="text" id="delivery-street" name="deliveryStreet" autocomplete="street-address" required>
+
+      <label for="delivery-box">Bus / Box number (optional)</label>
+      <input type="text" id="delivery-box" name="deliveryBox" autocomplete="address-line2" placeholder="e.g. Bus 3">
     
       <label for="delivery-instructions">Delivery instructions (optional)</label>
       <textarea id="delivery-instructions" name="deliveryInstructions" rows="3"></textarea>

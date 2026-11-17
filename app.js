@@ -321,10 +321,31 @@ backToCartButton.addEventListener("click", () => {
 
 const phoneInput = document.querySelector("#customer-phone");
 const phoneCountry = document.querySelector("#phone-country");
+const firstNameInput = document.querySelector("#customer-first-name");
+const lastNameInput = document.querySelector("#customer-last-name");
 const postcodeInput = document.querySelector("#delivery-postcode");
 const cityInput = document.querySelector("#delivery-city");
 const deliveryRegion = document.querySelector("#delivery-region");
 const belgianPostcodes = window.BELGIAN_POSTCODES;
+
+function validateName(input, label) {
+  const value = input.value.trim();
+  const validName = /^[\p{L}\p{M}]+(?:[ '\u2019-][\p{L}\p{M}]+)*$/u.test(value);
+  const valid = value.length >= 1 && value.length <= 50 && validName;
+
+  input.setCustomValidity(
+    !value && !input.value
+      ? ""
+      : valid
+        ? ""
+        : `Enter a valid ${label} using letters, spaces, apostrophes, or hyphens (up to 50 characters).`
+  );
+}
+
+function validateCustomerNames() {
+  validateName(firstNameInput, "first name");
+  validateName(lastNameInput, "last name");
+}
 
 function getBelgianRegion(postcode) {
   return belgianPostcodes[postcode]?.region || "";
@@ -429,6 +450,8 @@ function validatePhoneNumber() {
 
 phoneInput.addEventListener("input", validatePhoneNumber);
 phoneCountry.addEventListener("change", validatePhoneNumber);
+firstNameInput.addEventListener("input", () => validateName(firstNameInput, "first name"));
+lastNameInput.addEventListener("input", () => validateName(lastNameInput, "last name"));
 postcodeInput.addEventListener("change", populateCitiesForPostcode);
 cityInput.addEventListener("change", () => {
   validateBelgianAddress();
@@ -438,6 +461,7 @@ cityInput.addEventListener("change", () => {
 checkoutForm.addEventListener("submit", event => {
   event.preventDefault();
 
+  validateCustomerNames();
   validatePhoneNumber();
   validateBelgianAddress();
 
