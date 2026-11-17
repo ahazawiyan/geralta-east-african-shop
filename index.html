@@ -158,11 +158,6 @@
       </label>
       <input type="email" id="customer-email" name="customerEmail" autocomplete="email" required>
 
-      <label for="customer-phone">
-        Phone number <span class="required-star" aria-hidden="true">*</span>
-      </label>
-      <input type="tel" id="customer-phone" name="customerPhone" autocomplete="tel-national" placeholder="e.g. 0471 34 83 73" required>
-
       <label for="phone-country">Country / calling code</label>
       <select id="phone-country" name="phoneCountry" autocomplete="country" required>
         <option value="AT" data-dial="43">Austria (+43)</option>
@@ -193,6 +188,11 @@
         <option value="ES" data-dial="34">Spain (+34)</option>
         <option value="SE" data-dial="46">Sweden (+46)</option>
       </select>
+
+      <label for="customer-phone">
+        Phone number <span class="required-star" aria-hidden="true">*</span>
+      </label>
+      <input type="tel" id="customer-phone" name="customerPhone" autocomplete="tel-national" placeholder="e.g. 0471 34 83 73" required>
 
       <label for="delivery-postcode">
         Belgian postcode <span class="required-star" aria-hidden="true">*</span>
