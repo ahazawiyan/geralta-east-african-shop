@@ -27,9 +27,12 @@ jobs:
           test -f index.html
           test -f styles.css
           test -f app.js
+          test -f postal-codes.js
           test -f README.md
       - name: Check JavaScript syntax
         run: node --check app.js
+      - name: Check postcode data syntax
+        run: node --check postal-codes.js
       - name: Validate Gheralta shop catalogue
         run: |
           set -e

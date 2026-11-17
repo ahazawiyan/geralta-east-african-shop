@@ -594,6 +594,7 @@ footer span:last-child {
 }
 
 #checkout-form input,
+#checkout-form select,
 #checkout-form textarea {
     display: block;
     width: 100%;
@@ -881,6 +882,7 @@ footer span:last-child {
 }
 
 #checkout-form input,
+#checkout-form select,
 #checkout-form textarea {
     width: 100%;
     padding: 10px 12px;
@@ -892,6 +894,7 @@ footer span:last-child {
 }
 
 #checkout-form input:focus,
+#checkout-form select:focus,
 #checkout-form textarea:focus {
     outline: 2px solid var(--green2);
     outline-offset: 1px;
