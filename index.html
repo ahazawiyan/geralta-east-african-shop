@@ -72,6 +72,7 @@
         <button class="filter" data-category="Drinks">Drinks</button>
       </div>
 
+      <p class="tax-note">Product prices are shown before VAT. VAT is calculated and added to your order total.</p>
       <div class="product-grid" id="product-grid"></div>
     </section>
 
@@ -133,6 +134,7 @@
     <div class="cart-total">
       <strong id="cart-total">€0.00</strong>
     </div>
+    <p class="tax-note">Product prices are before VAT. VAT is shown separately in the order total.</p>
     
     <button class="primary-button checkout-button" id="checkout-button">
       Continue to checkout
@@ -143,6 +145,7 @@
     <p class="required-note">
       Fields marked <span class="required-star">*</span> are mandatory.
     </p>
+    <p id="checkout-status" role="status" aria-live="polite"></p>
       <label for="customer-first-name">
         First name <span class="required-star" aria-hidden="true">*</span>
       </label>
@@ -221,7 +224,7 @@
       <textarea id="delivery-instructions" name="deliveryInstructions" rows="3"></textarea>
     
       <button type="submit" class="primary-button checkout-button">
-        Review order
+        Continue to secure payment
       </button>
     
       <button type="button" id="back-to-cart" class="secondary-button">
@@ -233,6 +236,7 @@
 
   <div class="cart-backdrop" id="cart-backdrop" hidden></div>
   <script src="postal-codes.js"></script>
+  <script src="shop-config.js"></script>
   <script src="app.js"></script>
 </body>
 

@@ -1,13 +1,21 @@
 <?php
 declare(strict_types=1);
 
-header('Content-Type: application/json; charset=utf-8');
-header('Cache-Control: no-store');
+require_once __DIR__ . '/bootstrap.php';
 
-http_response_code(200);
-
-echo json_encode([
-    'status' => 'ok',
-    'service' => 'gheralta-shop-api',
-    'timestamp' => gmdate('c'),
-], JSON_UNESCAPED_SLASHES);
+try {
+    database();
+    jsonResponse(200, [
+        'status' => 'ok',
+        'service' => 'gheralta-shop-api',
+        'database' => 'ok',
+        'timestamp' => gmdate('c'),
+    ]);
+} catch (Throwable $error) {
+    error_log('Health check failed: ' . $error->getMessage());
+    jsonResponse(503, [
+        'status' => 'unavailable',
+        'service' => 'gheralta-shop-api',
+        'timestamp' => gmdate('c'),
+    ]);
+}

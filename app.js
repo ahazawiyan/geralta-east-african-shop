@@ -4,6 +4,7 @@ const products = [
     name: "Ethiopian Coffee",
     category: "Coffee",
     price: 20.00,
+    vatRate: 6,
     weightKg: 1,
     emoji: "☕",
     note: "1 kg bag"
@@ -13,6 +14,7 @@ const products = [
     name: "White Teff Flour",
     category: "Flour",
     price: 22.00,
+    vatRate: 6,
     weightKg: 5,
     emoji: "🌾",
     note: "5 kg bag"
@@ -22,6 +24,7 @@ const products = [
     name: "Brown Teff Flour",
     category: "Flour",
     price: 20.00,
+    vatRate: 6,
     weightKg: 5,
     emoji: "🌾",
     note: "5 kg bag"
@@ -31,6 +34,7 @@ const products = [
     name: "Berbere",
     category: "Spices",
     price: 25.00,
+    vatRate: 6,
     weightKg: 1,
     emoji: "🌶️",
     note: "1 kg"
@@ -40,6 +44,7 @@ const products = [
     name: "Shiro",
     category: "Spices",
     price: 15.00,
+    vatRate: 6,
     weightKg: 1,
     emoji: "🫘",
     note: "1 kg"
@@ -49,6 +54,7 @@ const products = [
     name: "Habesha Beer",
     category: "Drinks",
     price: 3.00,
+    vatRate: 21,
     weightKg: 1,
     emoji: "🍺",
     note: "Per bottle"
@@ -58,6 +64,7 @@ const products = [
     name: "Asmera Beer",
     category: "Drinks",
     price: 3.00,
+    vatRate: 21,
     weightKg: 1,
     emoji: "🍺",
     note: "Per bottle"
@@ -86,6 +93,36 @@ const money = value =>
     style: "currency",
     currency: "EUR"
   }).format(value);
+
+function calculateVatSummary(items, shippingCents) {
+  const netByRate = new Map();
+
+  items.forEach(item => {
+    const rate = item.vatRate;
+    const lineCents = Math.round(item.price * 100) * item.qty;
+    netByRate.set(rate, (netByRate.get(rate) || 0) + lineCents);
+  });
+
+  const netItemsCents = [...netByRate.values()].reduce((sum, value) => sum + value, 0);
+  const rates = [...netByRate.keys()].sort((left, right) => left - right);
+  let remainingShipping = shippingCents;
+  let vatCents = 0;
+  const breakdown = [];
+
+  rates.forEach((rate, index) => {
+    const netCents = netByRate.get(rate);
+    const allocatedShipping = index === rates.length - 1
+      ? remainingShipping
+      : Math.round(shippingCents * netCents / netItemsCents);
+    remainingShipping -= allocatedShipping;
+    const taxBase = netCents + allocatedShipping;
+    const rateVatCents = Math.round(taxBase * rate / 100);
+    vatCents += rateVatCents;
+    breakdown.push({ rate, taxBase, vatCents: rateVatCents });
+  });
+
+  return { netItemsCents, shippingCents, vatCents, breakdown };
+}
 
 function renderProducts() {
   const query = searchInput.value.trim().toLowerCase();
@@ -145,7 +182,7 @@ function renderCart() {
       <div class="cart-row">
         <div>
           <strong>${item.name}</strong>
-          <small>Qty: ${item.qty} · ${money(item.price)} each</small>
+          <small>Qty: ${item.qty} · ${money(item.price)} each excl. VAT</small>
         </div>
         <div>
           <strong>${money(item.price * item.qty)}</strong><br>
@@ -176,8 +213,9 @@ function renderCart() {
   const shipping = region ? navetteRates[region] : null;
   const heavyParcelSupplement = parcelWeight > 20 ? 4 : 0;
 
- document.querySelector("#cart-total").textContent =
-  `Product subtotal: ${money(subtotal)}`;
+  document.querySelector("#cart-total").textContent = cart.length
+    ? `Products subtotal (excl. VAT): ${money(subtotal)}`
+    : `Product subtotal: ${money(subtotal)}`;
 
   // Show shipping details below the existing cart total.
   let shippingDetails = document.querySelector("#shipping-details");
@@ -197,17 +235,22 @@ function renderCart() {
   } else if (shipping === null) {
     shippingDetails.innerHTML = `
     <p>Estimated parcel weight: ${parcelWeight.toFixed(2)} kg</p>
-    <p>Enter a Belgian postcode during checkout to calculate standard car delivery. Orders placed today are dispatched from our shop the next day.</p>
+    <p>Choose a Belgian postcode during checkout to calculate delivery and VAT. Orders placed today are dispatched from our shop the next day.</p>
   `;
   } else {
     const deliveryTotal = shipping + heavyParcelSupplement;
+    const tax = calculateVatSummary(cart, Math.round(deliveryTotal * 100));
     shippingDetails.innerHTML = `
       <p>Estimated parcel weight: ${parcelWeight.toFixed(2)} kg</p>
-      <p>Standard car delivery (${region}): ${money(shipping)}</p>
+      <p>Standard car delivery (${region}, before VAT): ${money(shipping)}</p>
       <p>Orders placed today are dispatched from our shop the next day.</p>
       ${heavyParcelSupplement ? `<p>Over 20 kg supplement: ${money(heavyParcelSupplement)}</p>` : ""}
-      <p><strong>Total before VAT and any fuel surcharge or tolls: ${money(subtotal + deliveryTotal)}</strong></p>
+      <p>Products subtotal before VAT: ${money(tax.netItemsCents / 100)}</p>
+      <p>Delivery before VAT: ${money(tax.shippingCents / 100)}</p>
+      ${tax.breakdown.map(line => `<p>VAT ${line.rate}%: ${money(line.vatCents / 100)}</p>`).join("")}
+      <p><strong>Total including VAT: ${money((tax.netItemsCents + tax.shippingCents + tax.vatCents) / 100)}</strong></p>
       <p>Each additional parcel to the same address adds €4 and is not included here.</p>
+      <p>Totals exclude any monthly fuel surcharge or tolls.</p>
 `;
   }
 }
@@ -326,6 +369,8 @@ const lastNameInput = document.querySelector("#customer-last-name");
 const postcodeInput = document.querySelector("#delivery-postcode");
 const cityInput = document.querySelector("#delivery-city");
 const deliveryRegion = document.querySelector("#delivery-region");
+const checkoutStatus = document.querySelector("#checkout-status");
+const apiBaseUrl = String(window.GHERALTA_API_BASE_URL || "").replace(/\/$/, "");
 const belgianPostcodes = window.BELGIAN_POSTCODES;
 
 function validateName(input, label) {
@@ -458,7 +503,7 @@ cityInput.addEventListener("change", () => {
   renderCart();
 });
 
-checkoutForm.addEventListener("submit", event => {
+checkoutForm.addEventListener("submit", async event => {
   event.preventDefault();
 
   validateCustomerNames();
@@ -469,9 +514,51 @@ checkoutForm.addEventListener("submit", event => {
     return;
   }
 
-  alert(
-    "Your delivery details are valid. Order submission and online payment are not enabled yet."
-  );
+  if (!apiBaseUrl) {
+    checkoutStatus.textContent = "Secure checkout is not connected yet. Your details have not been submitted.";
+    return;
+  }
+
+  const submitButton = checkoutForm.querySelector('[type="submit"]');
+  submitButton.disabled = true;
+  checkoutStatus.textContent = "Creating your secure payment session…";
+
+  try {
+    const response = await fetch(`${apiBaseUrl}/api/create-payment.php`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        customerFirstName: firstNameInput.value.trim(),
+        customerLastName: lastNameInput.value.trim(),
+        customerEmail: document.querySelector("#customer-email").value.trim(),
+        customerPhone: phoneInput.value.trim(),
+        phoneCountry: phoneCountry.value,
+        deliveryPostcode: postcodeInput.value,
+        deliveryCity: cityInput.value,
+        deliveryStreet: document.querySelector("#delivery-street").value.trim(),
+        deliveryBox: document.querySelector("#delivery-box").value.trim(),
+        deliveryInstructions: document.querySelector("#delivery-instructions").value.trim(),
+        items: cart.map(item => ({ id: item.id, qty: item.qty }))
+      })
+    });
+    const result = await response.json().catch(() => ({}));
+    if (!response.ok || typeof result.checkoutUrl !== "string") {
+      throw new Error(result.error || "Secure checkout could not be started.");
+    }
+
+    const checkoutUrl = new URL(result.checkoutUrl);
+    if (checkoutUrl.protocol !== "https:" || !/(^|\.)mollie\.com$/i.test(checkoutUrl.hostname)) {
+      throw new Error("The payment provider returned an invalid checkout link.");
+    }
+
+    checkoutStatus.textContent = `Order ${result.orderReference} is ready. Redirecting to Mollie…`;
+    window.location.assign(checkoutUrl.href);
+  } catch (error) {
+    checkoutStatus.textContent = error instanceof Error
+      ? error.message
+      : "Secure checkout could not be started. Please try again.";
+    submitButton.disabled = false;
+  }
 });
 
 
