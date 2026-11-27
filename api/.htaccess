@@ -1,0 +1,13 @@
+Options -Indexes
+
+<Files "bootstrap.php">
+  Require all denied
+</Files>
+
+<Files "hostinger-private-config.example.php">
+  Require all denied
+</Files>
+
+<FilesMatch "^\.env">
+  Require all denied
+</FilesMatch>

@@ -28,11 +28,15 @@ jobs:
           test -f styles.css
           test -f app.js
           test -f postal-codes.js
+          test -f shop-config.js
+          test -f payment-return.html
           test -f README.md
       - name: Check JavaScript syntax
         run: node --check app.js
       - name: Check postcode data syntax
         run: node --check postal-codes.js
+      - name: Check storefront configuration syntax
+        run: node --check shop-config.js
       - name: Validate Gheralta shop catalogue
         run: |
           set -e
@@ -84,7 +88,13 @@ jobs:
       - name: Upload website artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: .
+          path: |
+            index.html
+            styles.css
+            app.js
+            postal-codes.js
+            shop-config.js
+            payment-return.html
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4

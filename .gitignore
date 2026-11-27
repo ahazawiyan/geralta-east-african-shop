@@ -1,0 +1,8 @@
+.env
+.env.*
+gheralta-private-config.php
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
+*.sqlite-journal
+api/storage/
